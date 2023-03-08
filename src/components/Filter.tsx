@@ -99,6 +99,24 @@ export default function Filter() {
               : null
         }
 
+      <p>
+        filterName:
+        {' '}
+        {filterName}
+      </p>
+
+      <p>
+        filterDate:
+        {' '}
+        {filterDate}
+      </p>
+
+      <p>
+        selectedStatus
+        {' '}
+        {selectedStatus}
+      </p>
+
       <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
 
       <select value={selectedStatus} onChange={handleFilterByStatus}>
