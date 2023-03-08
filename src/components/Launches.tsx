@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { setLaunches } from '../store/slices/launchesSlice';
 import Card from './Card';
+import Filter from './Filter';
 
 interface Launch {
   id: number;
@@ -17,6 +18,9 @@ interface Launch {
 
 export default function Launches() {
   const launches = useSelector((state: RootState) => state.launches);
+
+  //   const [filteredData, setFilteredData] = useState<Launch[]>([]);
+  //   const [filteredData, setFilteredData] = useState<Launch[]>(launches);
   const dispatch = useDispatch();
 
   const fetchLaunches = async () => {
@@ -36,18 +40,25 @@ export default function Launches() {
     }));
 
     dispatch(setLaunches(selectedData));
+    // setFilteredData(selectedData);
+    localStorage.setItem('allLaunches', JSON.stringify(selectedData));
   };
 
   useEffect(() => {
     fetchLaunches();
+    // localStorage.setItem('allLaunches', JSON.stringify(launches));
   }, []);
 
   return (
-    <div>
-      {launches
-        .map((launch: Launch) => (
-          <Card launch={launch} key={launch.id} />
-        ))}
-    </div>
+    <>
+      <Filter />
+
+      <div>
+        {launches
+          .map((launch: Launch) => (
+            <Card launch={launch} key={launch.id} />
+          ))}
+      </div>
+    </>
   );
 }
