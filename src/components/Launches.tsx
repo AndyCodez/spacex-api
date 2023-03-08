@@ -19,8 +19,6 @@ interface Launch {
 export default function Launches() {
   const launches = useSelector((state: RootState) => state.launches);
 
-  //   const [filteredData, setFilteredData] = useState<Launch[]>([]);
-  //   const [filteredData, setFilteredData] = useState<Launch[]>(launches);
   const dispatch = useDispatch();
 
   const fetchLaunches = async () => {
@@ -40,13 +38,11 @@ export default function Launches() {
     }));
 
     dispatch(setLaunches(selectedData));
-    // setFilteredData(selectedData);
     localStorage.setItem('allLaunches', JSON.stringify(selectedData));
   };
 
   useEffect(() => {
     fetchLaunches();
-    // localStorage.setItem('allLaunches', JSON.stringify(launches));
   }, []);
 
   return (
