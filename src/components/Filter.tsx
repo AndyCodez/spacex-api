@@ -18,18 +18,17 @@ export default function Filter() {
   const launchesJson = localStorage.getItem('allLaunches');
 
   const dispatch = useDispatch();
+  const launches: Launch[] = launchesJson ? JSON.parse(launchesJson) : [];
 
   const filterLaunches = (filterName: string, filterStatus?: boolean, filterDate?: string) => {
-    const launches: Launch[] = launchesJson ? JSON.parse(launchesJson) : [];
-
     const filteredByName = launches.filter((launch) => (
       filterName.trim().length > 0
         ? launch.name.toLowerCase().includes(filterName.toLowerCase()) : launches
     ));
 
-    const filteredByNameAndStatus = filteredByName.filter((launch) => (
+    const filteredByNameAndStatus = filteredByName ? filteredByName.filter((launch) => (
       filterStatus === launch.success
-    ));
+    )) : launches.filter((launch) => (filterStatus === launch.success));
 
     const filteredByNameStatusAndDate = filteredByNameAndStatus.filter((launch) => {
       const launchDate = new Date(launch.date_utc);
@@ -70,10 +69,10 @@ export default function Filter() {
   };
 
   const options: string[] = ['success', 'failed'];
-  const [selectedOption, setSelectedOption] = useState<string>(options[0]);
+  const [selectedStatus, setSelectedStatus] = useState<string>(options[0]);
 
-  const handleOptionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.target.value);
+  const handleFilterByStatus = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedStatus(event.target.value);
     filterLaunches(filterName, event.target.value === options[0]);
   };
 
@@ -81,19 +80,32 @@ export default function Filter() {
 
   const handleFilterByDate = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilterDate(event.target.value);
-    filterLaunches(filterName, selectedOption === options[0], event.target.value);
+    filterLaunches(filterName, selectedStatus === options[0], event.target.value);
+  };
+
+  const clearFilters = () => {
+    setFilterName('');
+    setFilterDate('');
+    setSelectedStatus(options[0]);
+
+    dispatch(setLaunches(launches));
   };
 
   return (
     <div>
-      <input onChange={handleFilterByName} placeholder="filter by name" />
+      <button onClick={clearFilters} type="submit">Clear Filters</button>
 
-      <select value={selectedOption} onChange={handleOptionChange}>
-        {options.map((option) => (
+      <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
+
+      <select value={selectedStatus} onChange={handleFilterByStatus}>
+        {/* {options.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
-        ))}
+        ))} */}
+        <option value="">Filter by status</option>
+        <option value="success">Successful</option>
+        <option value="failure">Failure</option>
       </select>
 
       <select value={filterDate} onChange={handleFilterByDate}>
