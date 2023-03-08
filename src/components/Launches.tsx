@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { setLaunches } from '../store/slices/launchesSlice';
+import Card from './Card';
 
 interface Launch {
   id: number;
@@ -45,9 +46,7 @@ export default function Launches() {
     <div>
       {launches
         .map((launch: Launch) => (
-          <div key={launch.id}>
-            <p>{launch.name}</p>
-          </div>
+          <Card launch={launch} key={launch.id} />
         ))}
     </div>
   );
