@@ -28,7 +28,7 @@ export default function Filter() {
 
     const filteredByNameAndStatus = filteredByName ? filteredByName.filter((launch) => (
       filterStatus === launch.success
-    )) : launches.filter((launch) => (filterStatus === launch.success));
+    )) : launches.filter((launch) => ((filterStatus === launch.success) ? true : filteredByName));
 
     const filteredByNameStatusAndDate = filteredByNameAndStatus.filter((launch) => {
       const launchDate = new Date(launch.date_utc);
@@ -69,7 +69,7 @@ export default function Filter() {
   };
 
   const options: string[] = ['success', 'failed'];
-  const [selectedStatus, setSelectedStatus] = useState<string>(options[0]);
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
 
   const handleFilterByStatus = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value);
@@ -86,7 +86,7 @@ export default function Filter() {
   const clearFilters = () => {
     setFilterName('');
     setFilterDate('');
-    setSelectedStatus(options[0]);
+    setSelectedStatus('');
 
     dispatch(setLaunches(launches));
   };
