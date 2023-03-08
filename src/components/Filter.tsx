@@ -82,7 +82,6 @@ export default function Filter() {
   const handleFilterByDate = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilterDate(event.target.value);
     filterLaunches(filterName, selectedOption === options[0], event.target.value);
-    console.log(event.target.value);
   };
 
   return (
