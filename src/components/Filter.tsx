@@ -19,7 +19,7 @@ export default function Filter() {
 
   const dispatch = useDispatch();
 
-  const filterLaunches = (filterName: string, filterStatus?: boolean) => {
+  const filterLaunches = (filterName: string, filterStatus?: boolean, filterDate?: string) => {
     const launches: Launch[] = launchesJson ? JSON.parse(launchesJson) : [];
 
     const filteredByName = launches.filter((launch) => (
@@ -31,7 +31,35 @@ export default function Filter() {
       filterStatus === launch.success
     ));
 
-    dispatch(setLaunches(filteredByNameAndStatus));
+    const filteredByNameStatusAndDate = filteredByNameAndStatus.filter((launch) => {
+      const launchDate = new Date(launch.date_utc);
+      const currentDate = new Date();
+
+      switch (filterDate) {
+        case 'lastWeek':
+          return launchDate > new Date(
+            currentDate.getTime() - 7 * 247 * 24 * 60 * 60 * 1000,
+          );
+        case 'lastMonth':
+          return launchDate
+          > new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 1,
+            currentDate.getDate(),
+          );
+        case 'lastYear':
+          return launchDate
+            > new Date(
+              currentDate.getFullYear() - 1,
+              currentDate.getMonth(),
+              currentDate.getDate(),
+            );
+        default:
+          return true;
+      }
+    });
+
+    dispatch(setLaunches(filteredByNameStatusAndDate));
   };
 
   const [filterName, setFilterName] = useState('');
@@ -49,6 +77,14 @@ export default function Filter() {
     filterLaunches(filterName, event.target.value === options[0]);
   };
 
+  const [filterDate, setFilterDate] = useState('');
+
+  const handleFilterByDate = (event: ChangeEvent<HTMLSelectElement>) => {
+    setFilterDate(event.target.value);
+    filterLaunches(filterName, selectedOption === options[0], event.target.value);
+    console.log(event.target.value);
+  };
+
   return (
     <div>
       <input onChange={handleFilterByName} placeholder="filter by name" />
@@ -59,6 +95,13 @@ export default function Filter() {
             {option}
           </option>
         ))}
+      </select>
+
+      <select value={filterDate} onChange={handleFilterByDate}>
+        <option value="">Filter by date</option>
+        <option value="lastWeek">Last week</option>
+        <option value="lastMonth">Last month</option>
+        <option value="lastYear">Last year</option>
       </select>
 
     </div>
