@@ -93,16 +93,15 @@ export default function Filter() {
 
   return (
     <div>
-      <button onClick={clearFilters} type="submit">Clear Filters</button>
+      {
+            filterDate || filterName || selectedStatus
+              ? <button onClick={clearFilters} type="submit">Clear Filters</button>
+              : null
+        }
 
       <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
 
       <select value={selectedStatus} onChange={handleFilterByStatus}>
-        {/* {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))} */}
         <option value="">Filter by status</option>
         <option value="success">Successful</option>
         <option value="failure">Failure</option>
