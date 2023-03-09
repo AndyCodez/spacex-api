@@ -119,35 +119,13 @@ export default function Filter() {
 
   return (
     <div>
-      {
+      <div style={{ paddingTop: '20px' }}>
+        {
             filterDate || filterName || selectedStatus || upcomingStatus
               ? <button onClick={clearFilters} type="submit">Clear Filters</button>
               : null
         }
-
-      <p>
-        filterName:
-        {' '}
-        {filterName}
-      </p>
-
-      <p>
-        filterDate:
-        {' '}
-        {filterDate}
-      </p>
-
-      <p>
-        selectedStatus
-        {' '}
-        {selectedStatus}
-      </p>
-
-      <p>
-        upcomingStatus
-        {' '}
-        {upcomingStatus}
-      </p>
+      </div>
 
       <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
 
