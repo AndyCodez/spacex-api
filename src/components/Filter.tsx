@@ -28,56 +28,59 @@ export default function Filter() {
     filterDate?: string,
     filterUpcoming?: boolean,
   ) => {
-    const filteredByName = filterName
-     && filterName.trim().length > 0 ? launches.filter((launch) => (
-        launch.name.toLowerCase().includes(filterName.toLowerCase())
-      )) : launches;
+    let filteredLaunches = launches;
 
-    const filteredByStatus = filterStatus ? launches.filter(
-      (launch) => filterStatus.toLowerCase() === launch.success.toLowerCase(),
-    ) : launches;
+    if (filterName && filterName.trim().length > 0) {
+      filteredLaunches = filteredLaunches.filter(
+        (launch) => launch.name.toLowerCase().includes(filterName.toLowerCase()),
+      );
+    }
 
-    const filteredByDate = filterDate ? launches.filter((launch) => {
-      const launchDate = new Date(launch.date_utc);
-      const currentDate = new Date();
+    if (filterStatus) {
+      filteredLaunches = filteredLaunches.filter(
+        (launch) => filterStatus.toLowerCase() === launch.success.toLowerCase(),
+      );
+    }
 
-      switch (filterDate) {
-        case 'lastWeek':
-          return launchDate > new Date(
-            currentDate.getTime() - (7 * 24 * 60 * 60 * 1000),
-          );
-        case 'lastMonth':
-          return launchDate
-            > new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth() - 1,
-              currentDate.getDate(),
+    if (filterDate) {
+      filteredLaunches = filteredLaunches.filter((launch) => {
+        const launchDate = new Date(launch.date_utc);
+        const currentDate = new Date();
+
+        switch (filterDate) {
+          case 'lastWeek':
+            return launchDate > new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+          case 'lastMonth':
+            return (
+              launchDate
+              > new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth() - 1,
+                currentDate.getDate(),
+              )
             );
-        case 'lastYear':
-          return launchDate
+          case 'lastYear':
+            return (
+              launchDate
               > new Date(
                 currentDate.getFullYear() - 1,
                 currentDate.getMonth(),
                 currentDate.getDate(),
-              );
-        default:
-          return true;
-      }
-    }) : launches;
-
-    const filteredByUpcoming = launches.filter(
-      (launch) => filterUpcoming === launch.upcoming,
-    );
-
-    if (filterUpcoming) {
-      dispatch(setLaunches(filteredByUpcoming));
-    } else if (filterDate) {
-      dispatch(setLaunches(filteredByDate));
-    } else if (filterStatus) {
-      dispatch(setLaunches(filteredByStatus));
-    } else {
-      dispatch(setLaunches(filteredByName));
+              )
+            );
+          default:
+            return true;
+        }
+      });
     }
+
+    if (filterUpcoming !== undefined) {
+      filteredLaunches = filteredLaunches.filter(
+        (launch) => filterUpcoming === launch.upcoming,
+      );
+    }
+
+    dispatch(setLaunches(filteredLaunches));
   };
 
   const [filterName, setFilterName] = useState('');
