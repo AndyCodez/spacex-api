@@ -23,7 +23,12 @@ export default function Filter() {
   const options: string[] = ['failed', 'success'];
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  const filterLaunches = (filterName: string, filterStatus?: boolean, filterDate?: string) => {
+  const filterLaunches = (
+    filterName: string,
+    filterStatus?: boolean,
+    filterDate?: string,
+    filterUpcoming?: boolean,
+  ) => {
     const filteredByName = filterName.trim().length > 0 ? launches.filter((launch) => (
       launch.name.toLowerCase().includes(filterName.toLowerCase())
     )) : launches;
@@ -61,7 +66,11 @@ export default function Filter() {
       }
     });
 
-    dispatch(setLaunches(filteredByNameStatusAndDate));
+    const filterByUpcoming = filteredByNameStatusAndDate.filter(
+      (launch) => filterUpcoming === launch.upcoming,
+    );
+
+    dispatch(setLaunches(filterByUpcoming));
   };
 
   const [filterName, setFilterName] = useState('');
@@ -89,6 +98,13 @@ export default function Filter() {
     setSelectedStatus('');
 
     dispatch(setLaunches(launches));
+  };
+
+  const [upcomingStatus, setUpcomingStatus] = useState<boolean>(false);
+
+  const handleFilterByUpcoming = (event: ChangeEvent<HTMLInputElement>) => {
+    setUpcomingStatus(event.target.checked);
+    filterLaunches(filterName, selectedStatus === options[1], filterDate, event.target.checked);
   };
 
   return (
@@ -130,6 +146,11 @@ export default function Filter() {
         <option value="lastMonth">Last month</option>
         <option value="lastYear">Last year</option>
       </select>
+
+      <label htmlFor="upcomingStatus">
+        <input type="checkbox" onChange={handleFilterByUpcoming} />
+        Upcoming
+      </label>
 
     </div>
   );
