@@ -110,7 +110,7 @@ export default function Filter() {
   return (
     <div>
       {
-            filterDate || filterName || selectedStatus
+            filterDate || filterName || selectedStatus || upcomingStatus
               ? <button onClick={clearFilters} type="submit">Clear Filters</button>
               : null
         }
