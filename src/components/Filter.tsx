@@ -37,14 +37,14 @@ export default function Filter() {
       (launch) => filterStatus.toLowerCase() === launch.success.toLowerCase(),
     ) : launches;
 
-    const filteredByDate = launches.filter((launch) => {
-      const launchDate = new Date(Date.parse(launch.date_utc));
+    const filteredByDate = filterDate ? launches.filter((launch) => {
+      const launchDate = new Date(launch.date_utc);
       const currentDate = new Date();
 
       switch (filterDate) {
         case 'lastWeek':
           return launchDate > new Date(
-            currentDate.getTime() - 7 * 247 * 24 * 60 * 60 * 1000,
+            currentDate.getTime() - (7 * 24 * 60 * 60 * 1000),
           );
         case 'lastMonth':
           return launchDate
@@ -63,7 +63,7 @@ export default function Filter() {
         default:
           return true;
       }
-    });
+    }) : launches;
 
     const filteredByUpcoming = launches.filter(
       (launch) => filterUpcoming === launch.upcoming,
