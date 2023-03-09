@@ -23,8 +23,6 @@ export default function Launches() {
 
   const fetchLaunches = async () => {
     const response = await fetch('https://api.spacexdata.com/latest/launches');
-    // const response = await fetch('https://api.spacexdata.com/v5/launches');
-
     const jsonData = await response.json();
     const selectedData = jsonData.map((data: any) => ({
       id: data.id,
