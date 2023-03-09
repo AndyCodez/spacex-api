@@ -133,6 +133,12 @@ export default function Filter() {
         {selectedStatus}
       </p>
 
+      <p>
+        upcomingStatus
+        {' '}
+        {upcomingStatus}
+      </p>
+
       <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
 
       <select value={selectedStatus} onChange={handleFilterByStatus}>
