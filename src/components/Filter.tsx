@@ -20,18 +20,21 @@ export default function Filter() {
   const dispatch = useDispatch();
   const launches: Launch[] = launchesJson ? JSON.parse(launchesJson) : [];
 
-  const filterLaunches = (filterName: string, filterStatus?: boolean, filterDate?: string) => {
-    const filteredByName = launches.filter((launch) => (
-      filterName.trim().length > 0
-        ? launch.name.toLowerCase().includes(filterName.toLowerCase()) : launches
-    ));
+  const options: string[] = ['failed', 'success'];
+  const [selectedStatus, setSelectedStatus] = useState('');
 
-    const filteredByNameAndStatus = filteredByName ? filteredByName.filter((launch) => (
-      filterStatus === launch.success
-    )) : launches.filter((launch) => ((filterStatus === launch.success) ? true : filteredByName));
+  const filterLaunches = (filterName: string, filterStatus?: boolean, filterDate?: string) => {
+    const filteredByName = filterName.trim().length > 0 ? launches.filter((launch) => (
+      launch.name.toLowerCase().includes(filterName.toLowerCase())
+    )) : launches;
+
+    const filteredByNameAndStatus = (filterStatus === undefined)
+      ? (filteredByName) : (filteredByName.filter((launch) => (
+        filterStatus === launch.success
+      )));
 
     const filteredByNameStatusAndDate = filteredByNameAndStatus.filter((launch) => {
-      const launchDate = new Date(launch.date_utc);
+      const launchDate = new Date(Date.parse(launch.date_utc));
       const currentDate = new Date();
 
       switch (filterDate) {
@@ -68,19 +71,16 @@ export default function Filter() {
     filterLaunches(event.target.value);
   };
 
-  const options: string[] = ['success', 'failed'];
-  const [selectedStatus, setSelectedStatus] = useState<string>('');
-
   const handleFilterByStatus = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value);
-    filterLaunches(filterName, event.target.value === options[0]);
+    filterLaunches(filterName, event.target.value === options[1]);
   };
 
   const [filterDate, setFilterDate] = useState('');
 
   const handleFilterByDate = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilterDate(event.target.value);
-    filterLaunches(filterName, selectedStatus === options[0], event.target.value);
+    filterLaunches(filterName, selectedStatus === options[1], event.target.value);
   };
 
   const clearFilters = () => {
@@ -120,7 +120,6 @@ export default function Filter() {
       <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
 
       <select value={selectedStatus} onChange={handleFilterByStatus}>
-        <option value="">Filter by status</option>
         <option value="success">Successful</option>
         <option value="failure">Failure</option>
       </select>
