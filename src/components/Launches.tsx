@@ -12,7 +12,7 @@ interface Launch {
   date_utc: string;
   static_fire_date_utc: string;
   rocket: string | null;
-  success: boolean | null;
+  success: string;
   upcoming: boolean;
 }
 
@@ -33,7 +33,7 @@ export default function Launches() {
       date_utc: data.date_utc,
       static_fire_date_utc: data.static_fire_date_utc,
       rocket: data.uuid,
-      success: data.success,
+      success: data.success === true ? 'Successful' : 'Failed',
       upcoming: data.upcoming,
     }));
 

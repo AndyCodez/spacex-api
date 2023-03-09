@@ -10,7 +10,7 @@ interface Launch {
   date_utc: string;
   static_fire_date_utc: string;
   rocket: string | null;
-  success: boolean | null;
+  success: string;
   upcoming: boolean;
 }
 
@@ -20,25 +20,24 @@ export default function Filter() {
   const dispatch = useDispatch();
   const launches: Launch[] = launchesJson ? JSON.parse(launchesJson) : [];
 
-  const options: string[] = ['failed', 'success'];
   const [selectedStatus, setSelectedStatus] = useState('');
 
   const filterLaunches = (
-    filterName: string,
-    filterStatus?: boolean,
+    filterName?: string,
+    filterStatus?: string,
     filterDate?: string,
     filterUpcoming?: boolean,
   ) => {
-    const filteredByName = filterName.trim().length > 0 ? launches.filter((launch) => (
-      launch.name.toLowerCase().includes(filterName.toLowerCase())
-    )) : launches;
+    const filteredByName = filterName
+     && filterName.trim().length > 0 ? launches.filter((launch) => (
+        launch.name.toLowerCase().includes(filterName.toLowerCase())
+      )) : launches;
 
-    const filteredByNameAndStatus = (filterStatus === undefined)
-      ? (filteredByName) : (filteredByName.filter((launch) => (
-        filterStatus === launch.success
-      )));
+    const filteredByStatus = filterStatus ? launches.filter(
+      (launch) => filterStatus.toLowerCase() === launch.success.toLowerCase(),
+    ) : launches;
 
-    const filteredByNameStatusAndDate = filteredByNameAndStatus.filter((launch) => {
+    const filteredByDate = launches.filter((launch) => {
       const launchDate = new Date(Date.parse(launch.date_utc));
       const currentDate = new Date();
 
@@ -49,33 +48,33 @@ export default function Filter() {
           );
         case 'lastMonth':
           return launchDate
-          > new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth() - 1,
-            currentDate.getDate(),
-          );
-        case 'lastYear':
-          return launchDate
             > new Date(
-              currentDate.getFullYear() - 1,
-              currentDate.getMonth(),
+              currentDate.getFullYear(),
+              currentDate.getMonth() - 1,
               currentDate.getDate(),
             );
+        case 'lastYear':
+          return launchDate
+              > new Date(
+                currentDate.getFullYear() - 1,
+                currentDate.getMonth(),
+                currentDate.getDate(),
+              );
         default:
           return true;
       }
     });
 
-    const filterByUpcoming = filteredByNameStatusAndDate.filter(
+    const filteredByUpcoming = launches.filter(
       (launch) => filterUpcoming === launch.upcoming,
     );
 
     if (filterUpcoming) {
-      dispatch(setLaunches(filterByUpcoming));
+      dispatch(setLaunches(filteredByUpcoming));
     } else if (filterDate) {
-      dispatch(setLaunches(filteredByNameStatusAndDate));
+      dispatch(setLaunches(filteredByDate));
     } else if (filterStatus) {
-      dispatch(setLaunches(filteredByNameAndStatus));
+      dispatch(setLaunches(filteredByStatus));
     } else {
       dispatch(setLaunches(filteredByName));
     }
@@ -90,14 +89,14 @@ export default function Filter() {
 
   const handleFilterByStatus = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value);
-    filterLaunches(filterName, event.target.value === options[1]);
+    filterLaunches(filterName, event.target.value);
   };
 
   const [filterDate, setFilterDate] = useState('');
 
   const handleFilterByDate = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilterDate(event.target.value);
-    filterLaunches(filterName, selectedStatus === options[1], event.target.value);
+    filterLaunches(filterName, selectedStatus, event.target.value);
   };
 
   const clearFilters = () => {
@@ -112,7 +111,7 @@ export default function Filter() {
 
   const handleFilterByUpcoming = (event: ChangeEvent<HTMLInputElement>) => {
     setUpcomingStatus(event.target.checked);
-    filterLaunches(filterName, selectedStatus === options[1], filterDate, event.target.checked);
+    filterLaunches(filterName, selectedStatus, filterDate, event.target.checked);
   };
 
   return (
@@ -150,8 +149,8 @@ export default function Filter() {
       <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
 
       <select value={selectedStatus} onChange={handleFilterByStatus}>
-        <option value="success">Successful</option>
-        <option value="failure">Failure</option>
+        <option value="successful">Successful</option>
+        <option value="failed">Failed</option>
       </select>
 
       <select value={filterDate} onChange={handleFilterByDate}>

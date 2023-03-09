@@ -7,7 +7,7 @@ interface Launch {
   date_utc: string;
   static_fire_date_utc: string;
   rocket: string | null;
-  success: boolean | null;
+  success: string;
   upcoming: boolean;
 }
 
@@ -18,7 +18,7 @@ const LaunchState: Launch[] = [{
   date_utc: '',
   static_fire_date_utc: '',
   rocket: '',
-  success: false,
+  success: '',
   upcoming: false,
 }];
 

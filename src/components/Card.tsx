@@ -7,7 +7,7 @@ interface Launch {
   date_utc: string;
   static_fire_date_utc: string;
   rocket: string | null;
-  success: boolean | null;
+  success: string;
   upcoming: boolean;
 }
 
@@ -23,7 +23,7 @@ function Card({ launch }: CardProps): JSX.Element {
       <p>
         Status:
         {' '}
-        {launch.success ? 'Success' : 'Failed'}
+        {launch.success}
       </p>
       <p>{launch.upcoming ? 'Upcoming' : false }</p>
     </div>
