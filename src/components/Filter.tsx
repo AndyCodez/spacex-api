@@ -102,19 +102,22 @@ export default function Filter() {
     filterLaunches(filterName, selectedStatus, event.target.value);
   };
 
-  const clearFilters = () => {
-    setFilterName('');
-    setFilterDate('');
-    setSelectedStatus('');
-
-    dispatch(setLaunches(launches));
-  };
-
   const [upcomingStatus, setUpcomingStatus] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>();
 
   const handleFilterByUpcoming = (event: ChangeEvent<HTMLInputElement>) => {
     setUpcomingStatus(event.target.checked);
     filterLaunches(filterName, selectedStatus, filterDate, event.target.checked);
+  };
+
+  const clearFilters = () => {
+    setFilterName('');
+    setFilterDate('');
+    setSelectedStatus('');
+    setUpcomingStatus(false);
+    setIsChecked(false);
+
+    dispatch(setLaunches(launches));
   };
 
   return (
@@ -142,7 +145,7 @@ export default function Filter() {
       </select>
 
       <label htmlFor="upcomingStatus">
-        <input type="checkbox" onChange={handleFilterByUpcoming} />
+        <input type="checkbox" onChange={handleFilterByUpcoming} id="upcomingStatus" checked={isChecked} />
         Upcoming
       </label>
 
