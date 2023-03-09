@@ -70,7 +70,15 @@ export default function Filter() {
       (launch) => filterUpcoming === launch.upcoming,
     );
 
-    dispatch(setLaunches(filterByUpcoming));
+    if (filterUpcoming) {
+      dispatch(setLaunches(filterByUpcoming));
+    } else if (filterDate) {
+      dispatch(setLaunches(filteredByNameStatusAndDate));
+    } else if (filterStatus) {
+      dispatch(setLaunches(filteredByNameAndStatus));
+    } else {
+      dispatch(setLaunches(filteredByName));
+    }
   };
 
   const [filterName, setFilterName] = useState('');
