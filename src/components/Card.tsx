@@ -18,7 +18,7 @@ interface CardProps {
 function Card({ launch }: CardProps): JSX.Element {
   return (
 
-    <div className="bg-white rounded-lg overflow-hidden shadow-lg mx-auto max-w-sm">
+    <div className="bg-white rounded-lg overflow-hidden shadow-lg mx-auto my-2 max-w-sm">
       <div className="p-4">
         <h2 className="text-xl font-bold mb-2">{launch.name}</h2>
         <p className="text-gray-700 text-base">{launch.date_utc}</p>
