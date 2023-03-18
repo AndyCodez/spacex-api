@@ -44,15 +44,16 @@ export default function Launches() {
   }, []);
 
   return (
-    <>
-      <Filter />
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-6 px-2 sm:px-6 lg:px-8">
+      <div className="w-full space-y-8">
+        <Filter />
 
-      <div>
-        {launches
-          .map((launch: Launch) => (
+        <div className="bg-white rounded-lg shadow-md p-6">
+          {launches.map((launch: Launch) => (
             <Card launch={launch} key={launch.id} />
           ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -121,33 +121,67 @@ export default function Filter() {
   };
 
   return (
-    <div>
-      <div style={{ paddingTop: '20px' }}>
-        {
-            filterDate || filterName || selectedStatus || upcomingStatus
-              ? <button onClick={clearFilters} type="submit">Clear Filters</button>
-              : null
-        }
+    <div className="flex justify-center">
+      <div className="mr-4">
+        {filterDate || filterName || selectedStatus || upcomingStatus ? (
+          <button
+            onClick={clearFilters}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+          >
+            Clear Filters
+          </button>
+        ) : null}
       </div>
 
-      <input onChange={handleFilterByName} placeholder="filter by name" value={filterName} />
+      <div className="mr-4">
+        <input
+          onChange={handleFilterByName}
+          value={filterName}
+          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Filter by name"
+        />
+      </div>
 
-      <select value={selectedStatus} onChange={handleFilterByStatus}>
-        <option value="successful">Successful</option>
-        <option value="failed">Failed</option>
-      </select>
+      <div className="mr-4">
+        <select
+          value={selectedStatus}
+          onChange={handleFilterByStatus}
+          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="successful">Successful</option>
+          <option value="failed">Failed</option>
+        </select>
+      </div>
 
-      <select value={filterDate} onChange={handleFilterByDate}>
-        <option value="">Filter by date</option>
-        <option value="lastWeek">Last week</option>
-        <option value="lastMonth">Last month</option>
-        <option value="lastYear">Last year</option>
-      </select>
+      <div className="mr-4">
+        <select
+          value={filterDate}
+          onChange={handleFilterByDate}
+          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="">Filter by date</option>
+          <option value="lastWeek">Last week</option>
+          <option value="lastMonth">Last month</option>
+          <option value="lastYear">Last year</option>
+        </select>
+      </div>
 
-      <label htmlFor="upcomingStatus">
-        <input type="checkbox" onChange={handleFilterByUpcoming} id="upcomingStatus" checked={isChecked} />
-        Upcoming
-      </label>
+      <div className="mr-4">
+        <label
+          htmlFor="upcomingStatus"
+          className="inline-flex items-center"
+        >
+          <input
+            type="checkbox"
+            onChange={handleFilterByUpcoming}
+            id="upcomingStatus"
+            checked={isChecked}
+            className="form-checkbox h-5 w-5 text-gray-600"
+          />
+          <span className="ml-2 text-gray-700">Upcoming</span>
+        </label>
+      </div>
 
     </div>
   );

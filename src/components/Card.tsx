@@ -17,16 +17,20 @@ interface CardProps {
 
 function Card({ launch }: CardProps): JSX.Element {
   return (
-    <div style={{ border: '1px solid black' }}>
-      <p>{launch.name}</p>
-      <p>{launch.date_utc}</p>
-      <p>
-        Status:
-        {' '}
-        {launch.success}
-      </p>
-      <p>{launch.upcoming ? 'Upcoming' : false }</p>
+
+    <div className="bg-white rounded-lg overflow-hidden shadow-lg mx-auto max-w-sm">
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-2">{launch.name}</h2>
+        <p className="text-gray-700 text-base">{launch.date_utc}</p>
+        <p className={`text-base ${launch.success === 'Successful' ? 'text-green-500' : 'text-red-500'}`}>
+          Status:
+          {' '}
+          {launch.success}
+        </p>
+        <p className="text-base">{launch.upcoming ? 'Upcoming' : false }</p>
+      </div>
     </div>
+
   );
 }
 
