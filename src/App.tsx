@@ -8,7 +8,7 @@ function App() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-3">
             <div>
-              <a href="github.com/andycodez" className="text-xl font-semibold text-gray-800">SpaceX Launches</a>
+              <a href="https://github.com/andycodez" className="text-xl font-semibold text-gray-800">SpaceX Launches</a>
             </div>
             <div>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg" type="submit">
